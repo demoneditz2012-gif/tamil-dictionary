@@ -2,7 +2,7 @@
   "name": "Tamil ↔ English Dictionary",
   "short_name": "Tamil Dict",
   "description": "Learn Tamil words offline — free translation, quiz mode, favourites",
-  "start_url": "./",
+  "start_url": "/tamil-dictionary/",
   "display": "standalone",
   "background_color": "#F5F0E8",
   "theme_color": "#1B4332",
