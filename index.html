@@ -1,0 +1,677 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+<meta name="apple-mobile-web-app-title" content="Tamil Dict"/>
+<meta name="mobile-web-app-capable" content="yes"/>
+<meta name="theme-color" content="#1B4332"/>
+<link rel="manifest" href="manifest.json"/>
+<link rel="apple-touch-icon" href="icons/icon-192.png"/>
+<title>Tamil Dictionary</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Tamil:wght@400;600;700&family=Baloo+2:wght@400;600;700;800&display=swap" rel="stylesheet"/>
+<style>
+:root{--gd:#1B4332;--gm:#2D6A4F;--cream:#F5F0E8;--white:#fff;--muted:#6b7280;--r:18px;--f:'Baloo 2','Noto Sans Tamil',sans-serif;}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+body{font-family:var(--f);background:var(--cream);min-height:100vh;max-width:480px;margin:0 auto;display:flex;flex-direction:column;overflow-x:hidden;}
+.hdr{background:linear-gradient(135deg,#1B4332,#2D6A4F);color:#fff;padding:14px 18px 12px;display:flex;align-items:center;gap:12px;position:sticky;top:0;z-index:200;box-shadow:0 2px 12px rgba(0,0,0,.2);}
+.htitle{font-size:1.15rem;font-weight:800;flex:1;letter-spacing:-.3px;}
+.hbtn{background:rgba(255,255,255,.18);border:none;color:#fff;border-radius:10px;padding:6px 12px;font-size:1.1rem;cursor:pointer;font-family:var(--f);}
+.content{flex:1;overflow-y:auto;padding:16px 14px 90px;-webkit-overflow-scrolling:touch;}
+.card{background:var(--white);border-radius:var(--r);padding:18px;margin-bottom:14px;box-shadow:0 2px 16px rgba(0,0,0,.08);}
+.hero{background:linear-gradient(135deg,#1B4332,#2D6A4F);color:#fff;}
+.sec{font-size:.95rem;font-weight:800;color:var(--gd);margin-bottom:12px;}
+.dtog{display:flex;gap:8px;margin-bottom:12px;}
+.dbtn{flex:1;padding:11px 8px;border-radius:12px;border:none;font-family:var(--f);font-size:.85rem;font-weight:700;cursor:pointer;}
+.dbtn.on{background:var(--gd);color:#fff;} .dbtn.off{background:#f0faf4;color:var(--gd);}
+.sinput{width:100%;font-size:1rem;font-family:var(--f);padding:13px 15px;border-radius:14px;border:2px solid var(--gm);outline:none;background:var(--cream);color:#1a1a1a;transition:border-color .2s;}
+.sinput:focus{border-color:var(--gd);background:#fff;}
+.btn{display:flex;align-items:center;justify-content:center;gap:8px;border:none;border-radius:14px;padding:13px 18px;font-family:var(--f);font-size:1rem;font-weight:700;cursor:pointer;transition:transform .1s;}
+.btn:active{transform:scale(.97);}
+.bp{background:var(--gd);color:#fff;width:100%;margin-top:10px;}
+.bs{background:#f0faf4;color:var(--gd);}
+.bd{background:#ffebee;color:#c62828;width:100%;}
+.bi{padding:10px 14px;font-size:1.1rem;}
+.wrow{display:flex;align-items:center;gap:12px;background:#f0faf4;border-radius:14px;padding:13px 14px;margin-bottom:9px;cursor:pointer;transition:background .15s;}
+.wrow:active{background:#d8f0e4;}
+.wa{display:flex;flex-direction:column;gap:6px;}
+.we{font-size:1rem;font-weight:700;color:var(--gd);}
+.wt{font-size:1.1rem;font-weight:600;color:var(--gm);font-family:'Noto Sans Tamil',sans-serif;}
+.wr{font-size:.78rem;color:var(--muted);font-style:italic;}
+.tag{display:inline-block;border-radius:100px;padding:3px 11px;font-size:.78rem;font-weight:700;}
+.tp{background:#fff3e0;color:#e65100;} .to{background:#e8f5e9;color:#2e7d32;} .tc{background:#e3f2fd;color:#1565c0;} .tn{background:#fce4ec;color:#c62828;}
+.rc{border-radius:var(--r);padding:18px;margin-bottom:14px;box-shadow:0 2px 16px rgba(0,0,0,.08);background:#fff;}
+.rok{border:2px solid #a5d6a7;} .rerr{border:2px solid #ffcdd2;background:#fff8f8;}
+.reng{font-size:2.2rem;font-weight:900;color:var(--gd);line-height:1.1;}
+.rtam{font-size:1.8rem;font-weight:700;color:var(--gm);margin-top:4px;font-family:'Noto Sans Tamil',sans-serif;}
+.rrom{font-size:.9rem;color:var(--muted);font-style:italic;margin-top:2px;}
+.exb{background:#f0faf4;border-radius:12px;padding:13px;margin-top:14px;}
+.exl{font-size:.75rem;font-weight:700;color:var(--muted);margin-bottom:5px;}
+.exe{font-size:.95rem;color:#222;margin-bottom:4px;}
+.ext{font-size:.9rem;color:#555;font-family:'Noto Sans Tamil',sans-serif;}
+.errico{font-size:2rem;margin-bottom:8px;}
+.errttl{font-size:1.1rem;font-weight:800;color:#c62828;margin-bottom:6px;}
+.errmsg{font-size:.9rem;color:#555;line-height:1.6;}
+.errtip{font-size:.8rem;color:#999;margin-top:10px;padding-top:10px;border-top:1px solid #f5c6c6;}
+.ldg{text-align:center;padding:28px 0;color:var(--muted);}
+.spin{display:inline-block;width:28px;height:28px;border:3px solid #d0e8da;border-top-color:var(--gm);border-radius:50%;animation:spin .7s linear infinite;margin-bottom:10px;}
+@keyframes spin{to{transform:rotate(360deg);}}
+.sgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.stile{background:#f0faf4;border-radius:14px;padding:14px;text-align:center;}
+.sico{font-size:1.7rem;} .sval{font-size:1.8rem;font-weight:900;color:var(--gd);} .slbl{font-size:.78rem;color:var(--muted);}
+.fsrow{display:flex;gap:10px;align-items:center;margin-top:8px;}
+.fsdsp{flex:1;text-align:center;font-size:1.3rem;font-weight:700;color:var(--gd);}
+.nav{display:flex;background:#fff;border-top:1px solid #e0d8cc;position:fixed;bottom:0;left:0;right:0;max-width:480px;margin:0 auto;z-index:200;}
+.nbtn{flex:1;padding:10px 4px 8px;background:transparent;border:none;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:2px;color:#aaa;font-size:.62rem;font-weight:600;font-family:var(--f);}
+.nbtn.on{color:var(--gd);background:#e8f5e9;}
+.nico{font-size:1.45rem;}
+.toast{position:fixed;bottom:72px;left:50%;transform:translateX(-50%);background:var(--gd);color:#fff;padding:10px 24px;border-radius:100px;font-size:.85rem;font-weight:700;z-index:999;white-space:nowrap;box-shadow:0 4px 20px rgba(0,0,0,.2);pointer-events:none;opacity:0;transition:opacity .3s;font-family:var(--f);}
+.toast.show{opacity:1;}
+.ib{background:linear-gradient(135deg,#FFD166,#ffb700);color:#333;padding:12px 16px;display:flex;align-items:center;gap:10px;font-size:.85rem;font-weight:700;}
+.ib button{background:#fff;border:none;border-radius:10px;padding:6px 14px;font-weight:800;cursor:pointer;font-family:var(--f);font-size:.85rem;margin-left:auto;}
+.ibx{background:transparent!important;color:#666!important;padding:6px!important;margin-left:0!important;}
+.empty{text-align:center;padding:30px 0;color:#bbb;}
+.eico{font-size:3rem;} .etxt{font-size:.95rem;margin-top:8px;} .esub{font-size:.82rem;margin-top:4px;color:#ccc;}
+@keyframes up{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+.ani{animation:up .22s ease forwards;}
+.screen{display:none;} .screen.on{display:block;}
+</style>
+</head>
+<body>
+
+<div class="ib" id="ib" style="display:none">
+  <span>📲</span><span>Install for offline use!</span>
+  <button id="ibbtn">Install</button>
+  <button class="ibx" id="ibx">✕</button>
+</div>
+
+<div class="hdr">
+  <button class="hbtn" id="hback" style="display:none">←</button>
+  <div class="htitle" id="htitle">Tamil ↔ English</div>
+  <button class="hbtn" id="hgear">⚙️</button>
+</div>
+
+<div class="content">
+
+  <div class="screen on" id="s-home">
+    <div class="card hero ani">
+      <div style="font-size:1.6rem;font-weight:900;margin-bottom:4px">வணக்கம்! 👋</div>
+      <div style="font-size:1rem;opacity:.9">Tamil ↔ English Dictionary</div>
+      <div style="font-size:.82rem;opacity:.7;margin-top:3px">Learn Tamil words — offline &amp; free</div>
+    </div>
+    <div class="card ani" style="animation-delay:.05s">
+      <div class="sec">Quick Translate</div>
+      <div class="dtog">
+        <button class="dbtn on"  id="hd-en">🇬🇧 → 🇮🇳 English to Tamil</button>
+        <button class="dbtn off" id="hd-ta">🇮🇳 → 🇬🇧 Tamil to English</button>
+      </div>
+      <input class="sinput" id="hin" placeholder="Type English word…"/>
+      <button class="btn bp" id="hbtn">🔍 Translate</button>
+    </div>
+    <div class="card ani" style="animation-delay:.1s">
+      <div class="sec">📅 Word of the Day</div>
+      <div class="wrow" id="dwr">
+        <div style="flex:1">
+          <div class="we" id="deng"></div>
+          <div class="wt" id="dtam"></div>
+          <div class="wr" id="drom"></div>
+        </div>
+        <button class="btn bs bi" id="dspk">🔊</button>
+      </div>
+    </div>
+    <div class="card ani" id="rcard" style="animation-delay:.15s;display:none">
+      <div class="sec">🕐 Recent</div>
+      <div id="rlist"></div>
+    </div>
+  </div>
+
+  <div class="screen" id="s-search">
+    <div class="card">
+      <div class="dtog">
+        <button class="dbtn on"  id="sd-en">🇬🇧 → 🇮🇳</button>
+        <button class="dbtn off" id="sd-ta">🇮🇳 → 🇬🇧</button>
+      </div>
+      <input class="sinput" id="sin" placeholder="Type English word…"/>
+      <button class="btn bp" id="sbtn">🔍 Translate</button>
+    </div>
+    <div id="sres"></div>
+  </div>
+
+  <div class="screen" id="s-fav">
+    <div class="card">
+      <div class="sec" id="fttl">❤️ Saved Words</div>
+      <div id="flst"></div>
+    </div>
+  </div>
+
+  <div class="screen" id="s-word">
+    <button class="btn bs" id="wback" style="margin-bottom:12px">← Back</button>
+    <div class="card" id="wdet"></div>
+  </div>
+
+  <div class="screen" id="s-set">
+    <div class="card">
+      <div class="sec">⚙️ Text Size</div>
+      <div class="fsrow">
+        <button class="btn bs" id="fsminus">A−</button>
+        <div class="fsdsp" id="fsdsp">Aa (18px)</div>
+        <button class="btn bp" id="fsplus" style="width:auto;margin-top:0">A+</button>
+      </div>
+    </div>
+    <div class="card">
+      <div class="sec">📊 Stats</div>
+      <div class="sgrid" id="sgrid"></div>
+    </div>
+    <div class="card">
+      <div class="sec">🌐 Translation</div>
+      <div style="font-size:.85rem;color:#555;line-height:1.8">
+        <div>• <strong>Offline</strong>: Built-in dictionary (200+ words, instant)</div>
+        <div>• <strong>Online</strong>: MyMemory free API — any word, any device</div>
+        <div>• <strong>Cached</strong>: Previously looked-up words (instant)</div>
+        <div style="margin-top:8px;color:#999;font-size:.8rem">Online results are saved for offline use.</div>
+      </div>
+    </div>
+    <div class="card">
+      <button class="btn bd" id="clrhist" style="margin-bottom:10px">🗑️ Clear History</button>
+      <button class="btn bd" id="clrcac">🗑️ Clear Cache</button>
+    </div>
+  </div>
+
+</div>
+
+<nav class="nav">
+  <button class="nbtn on" data-s="home"><span class="nico">🏠</span><span>Home</span></button>
+  <button class="nbtn" data-s="search"><span class="nico">🔍</span><span>Search</span></button>
+  <button class="nbtn" data-s="fav"><span class="nico">❤️</span><span>Saved</span></button>
+  <button class="nbtn" data-s="set"><span class="nico">⚙️</span><span>Settings</span></button>
+</nav>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ── ERROR HANDLER ──────────────────────────────────────────────────────────
+window.onerror = function(msg, src, line, col, err) {
+  console.error('App error:', msg, 'line:', line, err);
+};
+
+// ── DICTIONARY ─────────────────────────────────────────────────────────────
+const DICT = [
+  {e:"rice",      t:"அரிசி",         r:"arisi",          p:"noun",      xE:"We eat rice every day.",           xT:"நாங்கள் தினமும் அரிசி சாப்பிடுகிறோம்."},
+  {e:"water",     t:"தண்ணீர்",       r:"thanneer",        p:"noun",      xE:"Please give me some water.",       xT:"தயவுசெய்து எனக்கு தண்ணீர் தாருங்கள்."},
+  {e:"milk",      t:"பால்",           r:"paal",            p:"noun",      xE:"The baby drinks milk.",             xT:"குழந்தை பால் குடிக்கிறது."},
+  {e:"bread",     t:"ரொட்டி",        r:"rotti",           p:"noun",      xE:"I eat bread for breakfast.",        xT:"நான் காலை உணவில் ரொட்டி சாப்பிடுகிறேன்."},
+  {e:"fruit",     t:"பழம்",           r:"pazham",          p:"noun",      xE:"Eat more fruit every day.",         xT:"தினமும் அதிக பழம் சாப்பிடுங்கள்."},
+  {e:"vegetable", t:"காய்கறி",       r:"kaaikari",        p:"noun",      xE:"Vegetables are good for health.",   xT:"காய்கறிகள் உடலுக்கு நல்லது."},
+  {e:"sugar",     t:"சர்க்கரை",     r:"sarkarai",        p:"noun",      xE:"Add less sugar to tea.",            xT:"தேநீரில் குறைவாக சர்க்கரை போடுங்கள்."},
+  {e:"salt",      t:"உப்பு",          r:"uppu",            p:"noun",      xE:"Avoid adding too much salt.",       xT:"அதிக உப்பு சேர்க்காதீர்கள்."},
+  {e:"oil",       t:"எண்ணெய்",      r:"ennai",           p:"noun",      xE:"Heat oil in the pan.",              xT:"கடாயில் எண்ணெய் சூடாக்குங்கள்."},
+  {e:"banana",    t:"வாழைப்பழம்",   r:"vaazhaipazham",   p:"noun",      xE:"The banana is ripe.",               xT:"வாழைப்பழம் பழுத்துள்ளது."},
+  {e:"mango",     t:"மாம்பழம்",     r:"maambazham",      p:"noun",      xE:"I love mango juice.",               xT:"மாம்பழ ஜூஸ் எனக்கு மிகவும் பிடிக்கும்."},
+  {e:"egg",       t:"முட்டை",       r:"muttai",          p:"noun",      xE:"Boil two eggs for me.",             xT:"எனக்கு இரண்டு முட்டை வேக வையுங்கள்."},
+  {e:"coffee",    t:"காபி",          r:"kaapi",           p:"noun",      xE:"I drink coffee in the morning.",    xT:"நான் காலையில் காபி குடிக்கிறேன்."},
+  {e:"tea",       t:"தேநீர்",       r:"theneer",         p:"noun",      xE:"Would you like some tea?",          xT:"தேநீர் வேண்டுமா?"},
+  {e:"fish",      t:"மீன்",          r:"meen",            p:"noun",      xE:"We bought fresh fish today.",       xT:"இன்று நாங்கள் புதிய மீன் வாங்கினோம்."},
+  {e:"mother",    t:"அம்மா",        r:"amma",            p:"noun",      xE:"My mother cooks well.",             xT:"என் அம்மா நன்றாக சமைப்பார்கள்."},
+  {e:"father",    t:"அப்பா",        r:"appa",            p:"noun",      xE:"My father goes to work.",           xT:"என் அப்பா வேலைக்கு போகிறார்."},
+  {e:"brother",   t:"அண்ணன்",      r:"annan",           p:"noun",      xE:"My brother is very tall.",          xT:"என் அண்ணன் மிகவும் உயரமாக இருக்கிறார்."},
+  {e:"sister",    t:"அக்கா",        r:"akka",            p:"noun",      xE:"My sister studies in college.",     xT:"என் அக்கா கல்லூரியில் படிக்கிறார்."},
+  {e:"grandmother",t:"பாட்டி",     r:"paatti",          p:"noun",      xE:"My grandmother tells stories.",     xT:"என் பாட்டி கதைகள் சொல்வார்கள்."},
+  {e:"grandfather",t:"தாத்தா",    r:"thaatha",         p:"noun",      xE:"My grandfather is eighty years old.",xT:"என் தாத்தாவுக்கு எண்பது வயது."},
+  {e:"son",       t:"மகன்",         r:"magan",           p:"noun",      xE:"My son is studying hard.",          xT:"என் மகன் கஷ்டமாக படிக்கிறான்."},
+  {e:"daughter",  t:"மகள்",         r:"magal",           p:"noun",      xE:"My daughter is a doctor.",          xT:"என் மகள் ஒரு மருத்துவர்."},
+  {e:"husband",   t:"கணவர்",       r:"kanaavar",        p:"noun",      xE:"My husband is kind.",               xT:"என் கணவர் மிகவும் அன்பானவர்."},
+  {e:"wife",      t:"மனைவி",       r:"manaivi",         p:"noun",      xE:"My wife is a teacher.",             xT:"என் மனைவி ஒரு ஆசிரியர்."},
+  {e:"child",     t:"குழந்தை",     r:"kuzhandhai",      p:"noun",      xE:"The child is playing outside.",     xT:"குழந்தை வெளியே விளையாடுகிறது."},
+  {e:"family",    t:"குடும்பம்",   r:"kudumbam",        p:"noun",      xE:"My family is very happy.",          xT:"என் குடும்பம் மிகவும் சந்தோஷமாக இருக்கிறது."},
+  {e:"happy",     t:"மகிழ்ச்சி",   r:"makilchi",        p:"adjective", xE:"I am very happy today.",            xT:"நான் இன்று மிகவும் மகிழ்ச்சியாக இருக்கிறேன்."},
+  {e:"sad",       t:"சோகம்",       r:"sogam",           p:"adjective", xE:"Try not to be sad.",                xT:"சோகமாக இருக்காதீர்கள்."},
+  {e:"angry",     t:"கோபம்",       r:"gopam",           p:"adjective", xE:"Why are you angry?",                xT:"நீங்கள் ஏன் கோபமாக இருக்கிறீர்கள்?"},
+  {e:"love",      t:"அன்பு",       r:"anbu",            p:"noun",      xE:"Love is important in life.",        xT:"வாழ்க்கையில் அன்பு முக்கியம்."},
+  {e:"fear",      t:"பயம்",        r:"payam",           p:"noun",      xE:"Try not to fear the dark.",         xT:"இருளுக்கு பயப்படாதீர்கள்."},
+  {e:"tired",     t:"சோர்வு",     r:"sorvu",           p:"adjective", xE:"I am very tired after work.",       xT:"வேலைக்கு பிறகு மிகவும் சோர்வாக இருக்கிறேன்."},
+  {e:"excited",   t:"உற்சாகம்",   r:"ursaagam",        p:"adjective", xE:"I am excited about the trip.",      xT:"பயணத்தைப் பற்றி உற்சாகமாக இருக்கிறேன்."},
+  {e:"worried",   t:"கவலை",       r:"kavalai",         p:"adjective", xE:"Try not to be worried.",            xT:"கவலைப்படாதீர்கள்."},
+  {e:"proud",     t:"பெருமை",     r:"perumai",         p:"adjective", xE:"I am proud of you.",                xT:"உங்களை பற்றி பெருமையாக இருக்கிறேன்."},
+  {e:"grateful",  t:"நன்றி",      r:"nandri",          p:"adjective", xE:"I am grateful for your help.",      xT:"உங்கள் உதவிக்கு நன்றியாக இருக்கிறேன்."},
+  {e:"eat",       t:"சாப்பிடு",   r:"saappidu",        p:"verb",      xE:"Please eat your food.",             xT:"தயவுசெய்து உணவு சாப்பிடுங்கள்."},
+  {e:"drink",     t:"குடி",        r:"kudi",            p:"verb",      xE:"Drink water after exercise.",       xT:"உடற்பயிற்சிக்கு பிறகு தண்ணீர் குடியுங்கள்."},
+  {e:"sleep",     t:"தூங்கு",     r:"thoongku",        p:"verb",      xE:"Go to sleep early.",                xT:"சீக்கிரம் தூங்குங்கள்."},
+  {e:"walk",      t:"நட",          r:"nada",            p:"verb",      xE:"Walk in the morning.",              xT:"காலையில் நடங்கள்."},
+  {e:"talk",      t:"பேசு",       r:"paesu",           p:"verb",      xE:"Talk slowly please.",               xT:"தயவுசெய்து மெதுவாக பேசுங்கள்."},
+  {e:"listen",    t:"கேள்",       r:"kael",            p:"verb",      xE:"Listen carefully.",                 xT:"கவனமாக கேளுங்கள்."},
+  {e:"read",      t:"படி",         r:"padi",            p:"verb",      xE:"Read the newspaper daily.",         xT:"தினமும் செய்தித்தாள் படியுங்கள்."},
+  {e:"write",     t:"எழுது",      r:"ezhuthu",         p:"verb",      xE:"Write your name here.",             xT:"உங்கள் பெயரை இங்கே எழுதுங்கள்."},
+  {e:"come",      t:"வா",          r:"vaa",             p:"verb",      xE:"Come here please.",                 xT:"இங்கே வாருங்கள்."},
+  {e:"go",        t:"போ",          r:"poo",             p:"verb",      xE:"Go to the market.",                 xT:"கடைக்கு போங்கள்."},
+  {e:"sit",       t:"உட்கார்",    r:"utkaar",          p:"verb",      xE:"Please sit down.",                  xT:"தயவுசெய்து உட்காருங்கள்."},
+  {e:"stand",     t:"நில்",       r:"nil",             p:"verb",      xE:"Stand up straight.",                xT:"நேராக நிற்கவும்."},
+  {e:"open",      t:"திற",        r:"thira",           p:"verb",      xE:"Open the window.",                  xT:"ஜன்னலை திறவுங்கள்."},
+  {e:"close",     t:"மூடு",       r:"moodu",           p:"verb",      xE:"Close the door.",                   xT:"கதவை மூடுங்கள்."},
+  {e:"help",      t:"உதவு",       r:"uthaavu",         p:"verb",      xE:"Can you help me?",                  xT:"என்னை உதவ முடியுமா?"},
+  {e:"buy",       t:"வாங்கு",    r:"vaangu",          p:"verb",      xE:"I will buy vegetables.",            xT:"நான் காய்கறி வாங்குவேன்."},
+  {e:"house",     t:"வீடு",       r:"veedu",           p:"noun",      xE:"Our house is big.",                 xT:"நமது வீடு பெரியது."},
+  {e:"door",      t:"கதவு",       r:"kathaavu",        p:"noun",      xE:"Close the front door.",             xT:"முன் கதவை மூடுங்கள்."},
+  {e:"window",    t:"ஜன்னல்",    r:"jannal",          p:"noun",      xE:"Open the window for air.",          xT:"காற்றுக்கு ஜன்னலை திறவுங்கள்."},
+  {e:"bed",       t:"படுக்கை",    r:"padukai",         p:"noun",      xE:"Make your bed every morning.",      xT:"ஒவ்வொரு காலையும் படுக்கை போடுங்கள்."},
+  {e:"chair",     t:"நாற்காலி",  r:"naarkaali",       p:"noun",      xE:"Sit on the chair.",                 xT:"நாற்காலியில் உட்காருங்கள்."},
+  {e:"table",     t:"மேஜை",      r:"maejai",          p:"noun",      xE:"The books are on the table.",       xT:"புத்தகங்கள் மேஜையில் உள்ளன."},
+  {e:"kitchen",   t:"சமையலறை",  r:"samaiyalarai",    p:"noun",      xE:"Mother is in the kitchen.",         xT:"அம்மா சமையலறையில் இருக்கிறார்."},
+  {e:"bathroom",  t:"குளியலறை",  r:"kuliyalarai",     p:"noun",      xE:"Clean the bathroom daily.",         xT:"தினமும் குளியலறை சுத்தம் செய்யுங்கள்."},
+  {e:"lamp",      t:"விளக்கு",    r:"vilakku",         p:"noun",      xE:"Turn on the lamp.",                 xT:"விளக்கை போடுங்கள்."},
+  {e:"fan",       t:"மின்விசிறி", r:"minvisiri",       p:"noun",      xE:"Switch on the fan.",                xT:"மின்விசிறியை போடுங்கள்."},
+  {e:"key",       t:"சாவி",      r:"saavi",           p:"noun",      xE:"Where is the key?",                 xT:"சாவி எங்கே?"},
+  {e:"broom",     t:"துடைப்பம்", r:"thudaippam",      p:"noun",      xE:"Sweep with the broom.",             xT:"துடைப்பத்தால் அடிங்கள்."},
+  {e:"doctor",    t:"மருத்துவர்", r:"maruththuvar",    p:"noun",      xE:"The doctor is very kind.",          xT:"மருத்துவர் மிகவும் அன்பானவர்."},
+  {e:"hospital",  t:"மருத்துவமனை",r:"maruththuvamanaai",p:"noun",    xE:"Go to the hospital.",               xT:"மருத்துவமனைக்கு போங்கள்."},
+  {e:"medicine",  t:"மருந்து",   r:"marundhu",        p:"noun",      xE:"Take medicine after food.",         xT:"உணவுக்கு பிறகு மருந்து எடுங்கள்."},
+  {e:"pain",      t:"வலி",        r:"vali",            p:"noun",      xE:"I have pain in my back.",           xT:"என் முதுகில் வலி இருக்கிறது."},
+  {e:"fever",     t:"காய்ச்சல்", r:"kaaichal",        p:"noun",      xE:"She has a high fever.",             xT:"அவளுக்கு அதிக காய்ச்சல் இருக்கிறது."},
+  {e:"headache",  t:"தலைவலி",   r:"thalaivali",      p:"noun",      xE:"I have a headache.",                xT:"என்னக்கு தலைவலி இருக்கிறது."},
+  {e:"cough",     t:"இருமல்",   r:"irumal",          p:"noun",      xE:"The cough is getting worse.",       xT:"இருமல் அதிகமாகிறது."},
+  {e:"blood",     t:"ரத்தம்",   r:"ratham",          p:"noun",      xE:"Blood test is normal.",             xT:"ரத்த பரிசோதனை சாதாரணம்."},
+  {e:"rest",      t:"ஓய்வு",    r:"oyvu",            p:"noun",      xE:"Take rest for two days.",           xT:"இரண்டு நாட்கள் ஓய்வு எடுங்கள்."},
+  {e:"healthy",   t:"ஆரோக்கியம்",r:"aarokyam",       p:"adjective", xE:"Stay healthy and happy.",           xT:"ஆரோக்கியமாகவும் மகிழ்ச்சியாகவும் இருங்கள்."},
+  {e:"one",       t:"ஒன்று",    r:"ondru",           p:"number",    xE:"I have one brother.",               xT:"என்னிடம் ஒரு அண்ணன் இருக்கிறான்."},
+  {e:"two",       t:"இரண்டு",   r:"irandu",          p:"number",    xE:"Give me two cups of tea.",          xT:"எனக்கு இரண்டு தேநீர் தாருங்கள்."},
+  {e:"three",     t:"மூன்று",   r:"moondru",         p:"number",    xE:"We have three cats.",               xT:"எங்களிடம் மூன்று பூனைகள் உள்ளன."},
+  {e:"four",      t:"நான்கு",   r:"naangu",          p:"number",    xE:"There are four seasons.",           xT:"நான்கு பருவங்கள் உள்ளன."},
+  {e:"five",      t:"ஐந்து",    r:"aindhu",          p:"number",    xE:"Buy five bananas.",                 xT:"ஐந்து வாழைப்பழம் வாங்குங்கள்."},
+  {e:"ten",       t:"பத்து",    r:"pathu",           p:"number",    xE:"I am ten years old.",               xT:"என்னக்கு பத்து வயது."},
+  {e:"hundred",   t:"நூறு",     r:"nooru",           p:"number",    xE:"It costs one hundred rupees.",      xT:"அது நூறு ரூபாய் விலை."},
+  {e:"thousand",  t:"ஆயிரம்",  r:"aayiram",         p:"number",    xE:"A thousand people attended.",       xT:"ஆயிரம் பேர் கலந்துகொண்டனர்."},
+  {e:"first",     t:"முதல்",    r:"muthal",          p:"adjective", xE:"I am first in class.",              xT:"நான் வகுப்பில் முதல்."},
+  {e:"last",      t:"கடைசி",   r:"kadaisi",         p:"adjective", xE:"This is the last stop.",            xT:"இது கடைசி நிலையம்."},
+  {e:"school",    t:"பள்ளி",    r:"palli",           p:"noun",      xE:"Children go to school.",            xT:"குழந்தைகள் பள்ளிக்கு போகிறார்கள்."},
+  {e:"teacher",   t:"ஆசிரியர்", r:"aasiriyar",       p:"noun",      xE:"The teacher is strict.",            xT:"ஆசிரியர் கடுமையானவர்."},
+  {e:"student",   t:"மாணவர்",  r:"maanaavar",       p:"noun",      xE:"The student is clever.",            xT:"மாணவர் புத்திசாலி."},
+  {e:"book",      t:"புத்தகம்", r:"puththagam",      p:"noun",      xE:"Read this book carefully.",         xT:"இந்த புத்தகத்தை கவனமாக படியுங்கள்."},
+  {e:"pen",       t:"பேனா",     r:"paenaa",          p:"noun",      xE:"Give me your pen.",                 xT:"உங்கள் பேனாவை தாருங்கள்."},
+  {e:"pencil",    t:"பென்சில்", r:"pencil",          p:"noun",      xE:"Write with a pencil.",              xT:"பென்சிலால் எழுதுங்கள்."},
+  {e:"class",     t:"வகுப்பு",  r:"vakuppu",         p:"noun",      xE:"Class starts at 9 am.",             xT:"வகுப்பு காலை 9 மணிக்கு தொடங்கும்."},
+  {e:"learn",     t:"கற்று",    r:"katru",           p:"verb",      xE:"Learn something new every day.",    xT:"தினமும் புதிதாக கற்றுக்கொள்ளுங்கள்."},
+  {e:"study",     t:"படி",      r:"padi",            p:"verb",      xE:"Study hard for the exam.",          xT:"தேர்வுக்கு கஷ்டமாக படியுங்கள்."},
+  {e:"homework",  t:"வீட்டுப்பாடம்",r:"veettupadam", p:"noun",      xE:"Finish your homework first.",       xT:"முதலில் வீட்டுப்பாடம் முடிக்கவும்."},
+  {e:"exam",      t:"தேர்வு",   r:"thaervu",         p:"noun",      xE:"The exam is next week.",            xT:"தேர்வு அடுத்த வாரம் உள்ளது."},
+  {e:"answer",    t:"பதில்",    r:"pathil",          p:"noun",      xE:"Give the correct answer.",          xT:"சரியான பதில் சொல்லுங்கள்."},
+];
+
+// Fast lookup
+const EN_MAP = {};
+DICT.forEach(w => EN_MAP[w.e.toLowerCase()] = w);
+
+// Word store — avoids passing JSON through onclick attributes entirely
+const WSTORE = [];
+function sw(w) { WSTORE.push(w); return WSTORE.length - 1; }
+function gw(i) { return WSTORE[i]; }
+
+// ── STATE ──────────────────────────────────────────────────────────────────
+let dir = 'en\u2192ta', cur = 'home', prev = 'home', selW = null, seq = 0;
+let fs   = parseInt(localStorage.getItem('tFS') || '18');
+let favs = JSON.parse(localStorage.getItem('tFav')  || '[]');
+let hist = JSON.parse(localStorage.getItem('tHist') || '[]');
+let cac  = JSON.parse(localStorage.getItem('tCac')  || '{}');
+
+// ── NAV ────────────────────────────────────────────────────────────────────
+function go(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('on'));
+  document.getElementById('s-' + id).classList.add('on');
+  document.querySelectorAll('.nbtn').forEach(b => b.classList.remove('on'));
+  const nb = document.querySelector(`.nbtn[data-s="${id}"]`);
+  if (nb) nb.classList.add('on');
+  const titles = {home:'Tamil \u2194 English', search:'\uD83D\uDD0D Search', fav:'\u2764\uFE0F Saved', word: selW ? selW.e : 'Word', set:'\u2699\uFE0F Settings'};
+  document.getElementById('htitle').textContent = titles[id] || id;
+  document.getElementById('hback').style.display = id === 'word' ? 'block' : 'none';
+  document.getElementById('hgear').style.display = id === 'set'  ? 'none'  : 'block';
+  prev = cur; cur = id;
+  if (id === 'fav') rFav();
+  if (id === 'set') rSet();
+  if (id === 'home') rRecent();
+}
+
+// Nav button clicks
+document.querySelectorAll('.nbtn').forEach(b => b.addEventListener('click', () => go(b.dataset.s)));
+document.getElementById('hback').addEventListener('click', () => go(prev === 'word' ? 'home' : prev));
+document.getElementById('hgear').addEventListener('click', () => go('set'));
+document.getElementById('wback').addEventListener('click', () => go(prev === 'word' ? 'home' : prev));
+
+// ── DIRECTION ──────────────────────────────────────────────────────────────
+function setDir(d) {
+  dir = d;
+  const en = d === 'en\u2192ta';
+  ['h', 's'].forEach(p => {
+    document.getElementById(p + 'd-en').className = 'dbtn ' + (en  ? 'on' : 'off');
+    document.getElementById(p + 'd-ta').className = 'dbtn ' + (!en ? 'on' : 'off');
+  });
+  const ph = en ? 'Type English word\u2026' : '\u0BA4\u0BAE\u0BBF\u0BB4\u0BCD \u0BB5\u0BBE\u0BB0\u0BCD\u0BA4\u0BCD\u0BA4\u0BC8\u2026';
+  document.getElementById('hin').placeholder = ph;
+  document.getElementById('sin').placeholder = ph;
+}
+document.getElementById('hd-en').addEventListener('click', () => setDir('en\u2192ta'));
+document.getElementById('hd-ta').addEventListener('click', () => setDir('ta\u2192en'));
+document.getElementById('sd-en').addEventListener('click', () => setDir('en\u2192ta'));
+document.getElementById('sd-ta').addEventListener('click', () => setDir('ta\u2192en'));
+
+// ── API ────────────────────────────────────────────────────────────────────
+// Try Google Translate (primary - no limits, great CORS support)
+// Fall back to MyMemory if Google fails
+async function fetchTranslation(q, d) {
+  const sl = d === 'en\u2192ta' ? 'en' : 'ta';
+  const tl = d === 'en\u2192ta' ? 'ta' : 'en';
+
+  // Primary: Google Translate unofficial free endpoint
+  try {
+    const url = 'https://translate.googleapis.com/translate_a/single?client=gtx&sl=' + sl + '&tl=' + tl + '&dt=t&q=' + encodeURIComponent(q);
+    const res = await fetch(url);
+    if (res.ok) {
+      const data = await res.json();
+      // Response format: [[[translated, original, ...], ...], ...]
+      const tr = data && data[0] && data[0].map(function(x) { return x[0]; }).join('').trim();
+      if (tr && tr.toLowerCase() !== q.toLowerCase()) {
+        // Example sentence (best-effort via Google)
+        let xE = '', xT = '';
+        try {
+          const ph = d === 'en\u2192ta' ? 'I use ' + q + ' every day.' : q;
+          const exUrl = 'https://translate.googleapis.com/translate_a/single?client=gtx&sl=' + sl + '&tl=' + tl + '&dt=t&q=' + encodeURIComponent(ph);
+          const er = await fetch(exUrl);
+          if (er.ok) {
+            const ed = await er.json();
+            const exTr = ed && ed[0] && ed[0].map(function(x) { return x[0]; }).join('').trim();
+            if (exTr) {
+              if (d === 'en\u2192ta') { xE = ph; xT = exTr; }
+              else                     { xT = ph; xE = exTr; }
+            }
+          }
+        } catch(e) { /* example is optional */ }
+        return { tr: tr, xE: xE, xT: xT };
+      }
+    }
+  } catch(e) { /* fall through to MyMemory */ }
+
+  // Fallback: MyMemory
+  const lp = sl + '|' + tl;
+  let res2;
+  try { res2 = await fetch('https://api.mymemory.translated.net/get?q=' + encodeURIComponent(q) + '&langpair=' + lp); }
+  catch (e) { throw new Error('No internet connection. Check your network and try again.'); }
+  if (!res2.ok) {
+    if (res2.status === 429) throw new Error('Daily translation limit reached. Try again tomorrow.');
+    throw new Error('Translation service error (' + res2.status + '). Please try again.');
+  }
+  let data2;
+  try { data2 = await res2.json(); }
+  catch (e) { throw new Error('Unexpected response from translation service.'); }
+  if (data2.responseStatus === 429) throw new Error('Daily translation limit reached. Try again tomorrow.');
+  if (data2.responseStatus !== 200) throw new Error(data2.responseDetails || 'Translation failed. Try a different word.');
+  const tr2 = (data2.responseData && data2.responseData.translatedText || '').trim();
+  if (!tr2 || tr2.toLowerCase() === q.toLowerCase())
+    throw new Error('"' + q + '" could not be translated. Check the spelling or try a simpler word.');
+  return { tr: tr2, xE: '', xT: '' };
+}
+
+// ── SEARCH ─────────────────────────────────────────────────────────────────
+async function doSearch() {
+  // Read value before switching screens
+  const q = (document.getElementById('sin').value || document.getElementById('hin').value || '').trim();
+  if (!q) { sErr('Please type a word first.', '\u270F\uFE0F', ''); go('search'); return; }
+  const my = ++seq;
+  go('search');
+  document.getElementById('sin').value = q;
+  document.getElementById('sbtn').textContent = '\u23F3 Translating\u2026';
+  document.getElementById('sbtn').disabled = true;
+  document.getElementById('sres').innerHTML = '<div class="ldg ani"><div class="spin"></div><div>Translating <strong>' + h(q) + '</strong>\u2026</div></div>';
+  try {
+    let res = null;
+    // 1. Offline dict
+    if (dir === 'en\u2192ta') {
+      const w = EN_MAP[q.toLowerCase()];
+      if (w) res = Object.assign({}, w, {src: 'off'});
+    } else {
+      const w = DICT.find(function(w) { return w.t === q || w.r.toLowerCase() === q.toLowerCase(); });
+      if (w) res = Object.assign({}, w, {src: 'off'});
+    }
+    // 2. Cache
+    if (!res) {
+      const k = dir + '|' + q.toLowerCase();
+      if (cac[k]) res = Object.assign({}, cac[k], {src: 'cac'});
+    }
+    // 3. API
+    if (!res) {
+      const d = await fetchTranslation(q, dir);
+      if (my !== seq) return;
+      const k = dir + '|' + q.toLowerCase();
+      if (dir === 'en\u2192ta') res = {e: q, t: d.tr, r: '', p: '', xE: d.xE, xT: d.xT, src: 'onl'};
+      else                       res = {e: d.tr, t: q, r: '', p: '', xE: d.xE, xT: d.xT, src: 'onl'};
+      cac[k] = res;
+      localStorage.setItem('tCac', JSON.stringify(cac));
+    }
+    if (my !== seq) return;
+    rRes(res);
+    hist = [res].concat(hist.filter(function(h) { return !(h.e === res.e && h.t === res.t); })).slice(0, 30);
+    localStorage.setItem('tHist', JSON.stringify(hist));
+  } catch (err) {
+    if (my !== seq) return;
+    sErr(err.message, '\u26A0\uFE0F', q);
+  } finally {
+    if (my === seq) {
+      document.getElementById('sbtn').textContent = '\uD83D\uDD0D Translate';
+      document.getElementById('sbtn').disabled = false;
+    }
+  }
+}
+
+document.getElementById('hbtn').addEventListener('click', doSearch);
+document.getElementById('sbtn').addEventListener('click', doSearch);
+document.getElementById('hin').addEventListener('keydown', function(e) { if (e.key === 'Enter') doSearch(); });
+document.getElementById('sin').addEventListener('keydown', function(e) { if (e.key === 'Enter') doSearch(); });
+
+function sErr(msg, icon, q) {
+  const sug = q ? DICT.filter(function(w) { return w.e[0] && w.e[0].toLowerCase() === q[0] && q[0] && Math.abs(w.e.length - q.length) <= 2; }).slice(0, 3).map(function(w) { return '<em>' + h(w.e) + '</em>'; }).join(', ') : '';
+  document.getElementById('sres').innerHTML =
+    '<div class="rc rerr ani"><div class="errico">' + icon + '</div>' +
+    '<div class="errttl">Could not translate</div>' +
+    '<div class="errmsg">' + h(msg) + '</div>' +
+    (sug ? '<div class="errtip">\uD83D\uDCA1 Did you mean: ' + sug + '?</div>' : '') + '</div>';
+}
+
+// ── RENDER RESULT ──────────────────────────────────────────────────────────
+function rRes(w) {
+  const idx = sw(w);
+  const sc = {off:'to', cac:'tc', onl:'tn'}[w.src] || 'to';
+  const sl = {off:'\uD83D\uDCDA Offline', cac:'\uD83D\uDCBE Cached', onl:'\uD83C\uDF10 Online'}[w.src] || '';
+  const fv = isFav(w);
+  let html = '<div class="rc rok ani">' +
+    '<div style="display:flex;justify-content:space-between;align-items:flex-start">' +
+    '<div style="flex:1"><div class="reng">' + h(w.e) + '</div>' +
+    '<div class="rtam">' + h(w.t) + '</div>' +
+    (w.r ? '<div class="rrom">/' + h(w.r) + '/</div>' : '') + '</div>' +
+    '<button class="btn bs bi" data-spk="' + idx + '">\uD83D\uDD0A</button></div>' +
+    '<div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px">' +
+    (w.p && w.p !== '\u2014' ? '<span class="tag tp">' + h(w.p) + '</span>' : '') +
+    '<span class="tag ' + sc + '">' + sl + '</span></div>';
+  if (w.xE) {
+    html += '<div class="exb"><div class="exl">\uD83D\uDCD6 Example</div>' +
+      '<div class="exe">' + h(w.xE) + '</div>' +
+      '<div class="ext">' + h(w.xT) + '</div>' +
+      '<button class="btn bs" style="margin-top:10px;padding:8px 14px;font-size:.82rem" data-spk-ex="' + idx + '">\uD83D\uDD0A Hear sentence</button></div>';
+  }
+  html += '<button class="btn" id="rfb" style="width:100%;margin-top:12px;background:' + (fv ? '#c8e6c9' : '#f0faf4') + ';color:var(--gd)" data-fav-res="' + idx + '">' + (fv ? '\u2764\uFE0F Saved' : '\uD83E\uDD0D Save Word') + '</button></div>';
+  document.getElementById('sres').innerHTML = html;
+  bindResultEvents();
+}
+
+function bindResultEvents() {
+  document.querySelectorAll('[data-spk]').forEach(function(b) {
+    b.addEventListener('click', function(e) { e.stopPropagation(); spk(gw(parseInt(b.dataset.spk)).e); });
+  });
+  document.querySelectorAll('[data-spk-ex]').forEach(function(b) {
+    b.addEventListener('click', function(e) { e.stopPropagation(); spk(gw(parseInt(b.dataset.spkEx)).xE); });
+  });
+  document.querySelectorAll('[data-fav-res]').forEach(function(b) {
+    b.addEventListener('click', function() {
+      const w = gw(parseInt(b.dataset.favRes));
+      tFav(w);
+      const fv = isFav(w);
+      b.textContent = fv ? '\u2764\uFE0F Saved' : '\uD83E\uDD0D Save Word';
+      b.style.background = fv ? '#c8e6c9' : '#f0faf4';
+    });
+  });
+}
+
+// ── HOME ───────────────────────────────────────────────────────────────────
+function rHome() {
+  const dw = DICT[Math.floor(Date.now() / 86400000) % DICT.length];
+  document.getElementById('deng').textContent = dw.e;
+  document.getElementById('dtam').textContent = dw.t;
+  document.getElementById('drom').textContent = dw.r;
+  const dwr = document.getElementById('dwr');
+  dwr.onclick = function() { openW(dw, 'home'); };
+  document.getElementById('dspk').onclick = function(e) { e.stopPropagation(); spk(dw.e); };
+  rRecent();
+}
+
+function rRecent() {
+  const card = document.getElementById('rcard');
+  const list = document.getElementById('rlist');
+  if (!hist.length) { card.style.display = 'none'; return; }
+  card.style.display = 'block';
+  list.innerHTML = '';
+  hist.slice(0, 5).forEach(function(w) { list.appendChild(mkRow(w, 'home')); });
+}
+
+// ── WORD DETAIL ────────────────────────────────────────────────────────────
+function openW(w, from) {
+  selW = w; prev = from || cur;
+  const fv = isFav(w);
+  const sc = {off:'to', cac:'tc', onl:'tn'}[w.src] || '';
+  const sl = {off:'\uD83D\uDCDA Offline', cac:'\uD83D\uDCBE Cached', onl:'\uD83C\uDF10 Online'}[w.src] || '';
+  const idx = sw(w);
+  let html = '<div style="display:flex;justify-content:space-between;align-items:flex-start">' +
+    '<div style="flex:1">' +
+    '<div style="font-size:2.5rem;font-weight:900;color:var(--gd);line-height:1.1">' + h(w.e) + '</div>' +
+    '<div style="font-size:2rem;font-weight:700;color:var(--gm);margin-top:5px;font-family:\'Noto Sans Tamil\',sans-serif">' + h(w.t) + '</div>' +
+    (w.r ? '<div class="wr" style="font-size:.9rem;margin-top:3px">/' + h(w.r) + '/</div>' : '') + '</div>' +
+    '<button class="btn bs bi" style="font-size:1.6rem;padding:12px 16px" data-spk="' + idx + '">\uD83D\uDD0A</button></div>' +
+    '<div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:12px">' +
+    (w.p && w.p !== '\u2014' ? '<span class="tag tp">' + h(w.p) + '</span>' : '') +
+    (w.src ? '<span class="tag ' + sc + '">' + sl + '</span>' : '') + '</div>';
+  if (w.xE) {
+    html += '<div class="exb" style="margin-top:16px"><div class="exl">\uD83D\uDCD6 Example Sentence</div>' +
+      '<div class="exe">' + h(w.xE) + '</div>' +
+      '<div class="ext">' + h(w.xT) + '</div>' +
+      '<button class="btn bs" style="margin-top:10px;padding:8px 14px;font-size:.82rem" data-spk-ex="' + idx + '">\uD83D\uDD0A Hear sentence</button></div>';
+  }
+  html += '<button class="btn" id="wfb" style="width:100%;margin-top:14px;background:' + (fv ? '#c8e6c9' : '#f0faf4') + ';color:var(--gd)" data-fav-word="' + idx + '">' + (fv ? '\u2764\uFE0F Saved to Favourites' : '\uD83E\uDD0D Save to Favourites') + '</button>';
+  document.getElementById('wdet').innerHTML = html;
+  document.getElementById('htitle').textContent = w.e;
+  bindResultEvents();
+  document.querySelectorAll('[data-fav-word]').forEach(function(b) {
+    b.addEventListener('click', function() {
+      tFav(selW);
+      const fv = isFav(selW);
+      b.textContent = fv ? '\u2764\uFE0F Saved to Favourites' : '\uD83E\uDD0D Save to Favourites';
+      b.style.background = fv ? '#c8e6c9' : '#f0faf4';
+    });
+  });
+  go('word');
+}
+
+// ── FAVOURITES ─────────────────────────────────────────────────────────────
+function isFav(w) { return favs.some(function(f) { return f.e === w.e && f.t === w.t; }); }
+function tFav(w) {
+  if (isFav(w)) { favs = favs.filter(function(f) { return !(f.e === w.e && f.t === w.t); }); toast('Removed from favourites'); }
+  else { favs = [w].concat(favs); toast('Added to favourites \u2764\uFE0F'); }
+  localStorage.setItem('tFav', JSON.stringify(favs));
+}
+function rFav() {
+  document.getElementById('fttl').textContent = '\u2764\uFE0F Saved Words (' + favs.length + ')';
+  const lst = document.getElementById('flst');
+  lst.innerHTML = '';
+  if (!favs.length) {
+    lst.innerHTML = '<div class="empty"><div class="eico">\uD83E\uDD0D</div><div class="etxt">No saved words yet</div><div class="esub">Tap \uD83E\uDD0D on any word to save it</div></div>';
+    return;
+  }
+  favs.forEach(function(w) { lst.appendChild(mkRow(w, 'fav')); });
+}
+
+// ── ROW BUILDER — no inline onclick, no JSON in attributes ─────────────────
+function mkRow(w, from) {
+  const idx = sw(w);
+  const div = document.createElement('div');
+  div.className = 'wrow';
+  div.innerHTML =
+    '<div style="flex:1"><div class="we">' + h(w.e) + '</div>' +
+    '<div class="wt">' + h(w.t) + '</div>' +
+    (w.r ? '<div class="wr">' + h(w.r) + '</div>' : '') + '</div>' +
+    '<div class="wa">' +
+    '<button class="btn bs bi" data-spk="' + idx + '">\uD83D\uDD0A</button>' +
+    '<button class="btn bs bi" data-fav="' + idx + '">' + (isFav(w) ? '\u2764\uFE0F' : '\uD83E\uDD0D') + '</button>' +
+    '</div>';
+  div.addEventListener('click', function() { openW(gw(idx), from); });
+  div.querySelector('[data-spk]').addEventListener('click', function(e) { e.stopPropagation(); spk(gw(idx).e); });
+  div.querySelector('[data-fav]').addEventListener('click', function(e) {
+    e.stopPropagation();
+    tFav(gw(idx));
+    this.textContent = isFav(gw(idx)) ? '\u2764\uFE0F' : '\uD83E\uDD0D';
+    if (from === 'fav') rFav();
+    if (from === 'home') rRecent();
+  });
+  return div;
+}
+
+// ── SETTINGS ───────────────────────────────────────────────────────────────
+function rSet() {
+  document.getElementById('fsdsp').textContent = 'Aa (' + fs + 'px)';
+  document.getElementById('sgrid').innerHTML = [
+    ['\uD83D\uDCDA', 'Dictionary', DICT.length],
+    ['\u2764\uFE0F', 'Favourites', favs.length],
+    ['\uD83D\uDD50', 'Searched',   hist.length],
+    ['\uD83D\uDCBE', 'Cached',     Object.keys(cac).length],
+  ].map(function(x) {
+    return '<div class="stile"><div class="sico">' + x[0] + '</div><div class="sval">' + x[2] + '</div><div class="slbl">' + x[1] + '</div></div>';
+  }).join('');
+}
+function chFS(d) {
+  fs = Math.max(14, Math.min(30, fs + d));
+  localStorage.setItem('tFS', fs);
+  document.body.style.fontSize = fs + 'px';
+  document.getElementById('fsdsp').textContent = 'Aa (' + fs + 'px)';
+}
+document.getElementById('fsminus').addEventListener('click', function() { chFS(-2); });
+document.getElementById('fsplus').addEventListener('click',  function() { chFS(2); });
+document.getElementById('clrhist').addEventListener('click', function() { hist = []; localStorage.setItem('tHist', '[]'); toast('History cleared'); rRecent(); rSet(); });
+document.getElementById('clrcac').addEventListener('click',  function() { cac  = {}; localStorage.setItem('tCac',  '{}'); toast('Cache cleared');   rSet(); });
+
+// ── HELPERS ────────────────────────────────────────────────────────────────
+function h(s) {
+  return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+function spk(t) {
+  if (!window.speechSynthesis) return;
+  var u = new SpeechSynthesisUtterance(t);
+  u.lang = 'en-US'; u.rate = 0.85;
+  window.speechSynthesis.cancel();
+  window.speechSynthesis.speak(u);
+}
+var tT;
+function toast(m, bg) {
+  var el = document.getElementById('toast');
+  el.textContent = m; el.style.background = bg || '#1B4332';
+  el.classList.add('show'); clearTimeout(tT);
+  tT = setTimeout(function() { el.classList.remove('show'); }, 2800);
+}
+
+// ── PWA ────────────────────────────────────────────────────────────────────
+var dp = null;
+window.addEventListener('beforeinstallprompt', function(e) { e.preventDefault(); dp = e; document.getElementById('ib').style.display = 'flex'; });
+document.getElementById('ibbtn').addEventListener('click', function() { if (!dp) return; dp.prompt(); dp.userChoice.then(function() { dp = null; document.getElementById('ib').style.display = 'none'; }); });
+document.getElementById('ibx').addEventListener('click',   function() { document.getElementById('ib').style.display = 'none'; });
+if ('serviceWorker' in navigator) window.addEventListener('load', function() { navigator.serviceWorker.register('sw.js').catch(function() {}); });
+
+// ── INIT ───────────────────────────────────────────────────────────────────
+document.body.style.fontSize = fs + 'px';
+rHome();
+</script>
+</body>
+</html>
