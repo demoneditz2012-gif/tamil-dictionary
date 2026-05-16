@@ -1,7 +1,7 @@
 const CACHE = 'tamil-dict-v1';
 const ASSETS = [
-  './',
-  './index.html',
+  'tamil-dictionary',
+  'tamil-dictionary/index.html',
   'https://fonts.googleapis.com/css2?family=Noto+Sans+Tamil:wght@400;600;700&family=Baloo+2:wght@400;600;700;800&display=swap',
 ];
 
